@@ -1,0 +1,2161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mohamed Tawhid — Electrical Power & Renewable Energy Engineer specializing in grid modelling, energy analytics, and renewable energy systems.">
+    <meta name="keywords" content="Electrical Engineer, Renewable Energy, Grid Modelling, Energy Analyst, Power Systems, Python, ETAP, PSS/E, PVsyst, HOMER Pro">
+    <meta name="author" content="Mohamed Tawhid">
+
+    <title>Mohamed Tawhid | Electrical Power & Renewable Energy Engineer</title>
+
+    <!-- Google Analytics (replace G-XXXXXXXXXX with your ID) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+
+    <style>
+        /* ============================================
+           CSS RESET & BASE STYLES
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Engineering Brand Colors */
+            --primary: #0f4c81;
+            --primary-dark: #082f4f;
+            --primary-light: #e0ecf7;
+            --accent: #f59e0b;
+            --accent-light: #fef3c7;
+            --energy: #06b6d4;
+            --energy-dark: #0891b2;
+            --text-dark: #0f172a;
+            --text-medium: #475569;
+            --text-light: #94a3b8;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.15);
+            --shadow-xl: 0 20px 40px -5px rgba(0, 0, 0, 0.2);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ============================================
+           UTILITY CLASSES
+           ============================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            text-align: center;
+            letter-spacing: -0.02em;
+        }
+
+        .section-title .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--energy));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-medium);
+            font-size: 1.125rem;
+            max-width: 650px;
+            margin: 0 auto 3rem;
+        }
+
+        /* ============================================
+           BUTTONS
+           ============================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.75rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--energy));
+            color: white;
+            box-shadow: 0 4px 15px rgba(15, 76, 129, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(15, 76, 129, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* ============================================
+           HEADER / NAVIGATION
+           ============================================ */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .header.scrolled { box-shadow: var(--shadow-md); }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-mark {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--energy));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.125rem;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .nav a {
+            padding: 0.5rem 0.875rem;
+            color: var(--text-medium);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-radius: 50px;
+            transition: var(--transition);
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: var(--text-dark);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        /* ============================================
+           HERO SECTION
+           ============================================ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 100px;
+            padding-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+            background: var(--bg-white);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(15, 76, 129, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .hero .container { position: relative; z-index: 1; }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text .greeting {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-text h1 {
+            font-size: 3.25rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero-text h1 .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--energy));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-text .role {
+            font-size: 1.35rem;
+            color: var(--text-medium);
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .hero-text .bio {
+            font-size: 1.05rem;
+            color: var(--text-medium);
+            margin-bottom: 2rem;
+            max-width: 580px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-stat .number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
+            line-height: 1;
+        }
+
+        .hero-stat .label {
+            font-size: 0.8rem;
+            color: var(--text-medium);
+            margin-top: 0.25rem;
+            max-width: 120px;
+        }
+
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .profile-frame {
+            width: 360px;
+            height: 360px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--energy));
+            padding: 6px;
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .profile-frame::before {
+            content: '';
+            position: absolute;
+            inset: -20px;
+            border: 2px dashed var(--primary-light);
+            border-radius: 50%;
+            animation: spin 30s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .profile-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--bg-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            overflow: hidden;
+        }
+
+        .floating-badge {
+            position: absolute;
+            background: var(--bg-white);
+            padding: 0.65rem 1.1rem;
+            border-radius: 50px;
+            box-shadow: var(--shadow-lg);
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .floating-badge.badge-1 { top: 20px; left: -20px; animation-delay: 0s; }
+        .floating-badge.badge-2 { bottom: 40px; right: -30px; animation-delay: 1s; }
+        .floating-badge.badge-3 { top: 50%; right: -40px; animation-delay: 2s; }
+
+        /* ============================================
+           ABOUT SECTION
+           ============================================ */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .about-text h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .about-text p {
+            color: var(--text-medium);
+            margin-bottom: 1rem;
+            font-size: 1.02rem;
+        }
+
+        .info-list {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+
+        .info-item:hover {
+            background: var(--primary-light);
+            transform: translateX(5px);
+        }
+
+        .info-item .icon { font-size: 1.5rem; min-width: 2rem; }
+        .info-item h4 { font-size: 0.95rem; margin-bottom: 0.15rem; }
+        .info-item p { margin: 0; font-size: 0.875rem; color: var(--text-medium); }
+
+        /* ============================================
+           TIMELINE
+           ============================================ */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary), var(--energy));
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .timeline-item:last-child { padding-bottom: 0; }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 5px;
+            width: 18px;
+            height: 18px;
+            background: var(--bg-white);
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px var(--primary-light);
+        }
+
+        .timeline-item .date {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-item h4 { font-size: 1.1rem; margin-bottom: 0.25rem; }
+        .timeline-item .company {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .timeline-item p { color: var(--text-medium); font-size: 0.9rem; }
+
+        /* ============================================
+           SKILLS SECTION
+           ============================================ */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border-top: 4px solid var(--primary);
+        }
+
+        .skill-category:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .skill-category .category-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+        .skill-category h3 { font-size: 1.2rem; margin-bottom: 1.5rem; color: var(--text-dark); }
+        .skill-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+        .skill-tag {
+            padding: 0.5rem 1rem;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .skill-tag:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* ============================================
+           SOFTWARE SECTION
+           ============================================ */
+        .software-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .software-card {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .software-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--energy));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: var(--transition);
+        }
+
+        .software-card:hover::before { transform: scaleX(1); }
+        .software-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+        .software-card .software-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+        .software-card h4 { font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--text-dark); }
+
+        .software-card .proficiency {
+            display: flex;
+            justify-content: center;
+            gap: 3px;
+            margin-top: 0.5rem;
+        }
+
+        .proficiency-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border-color);
+        }
+
+        .proficiency-dot.filled { background: var(--primary); }
+
+        /* ============================================
+           LANGUAGES SECTION
+           ============================================ */
+        .languages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+        }
+
+        .language-card {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .language-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); }
+
+        .language-flag {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .language-card h3 { font-size: 1.35rem; margin-bottom: 0.5rem; }
+
+        .language-card .level {
+            display: inline-block;
+            padding: 0.25rem 1rem;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .language-card .level-desc { color: var(--text-medium); font-size: 0.9rem; }
+
+        /* ============================================
+           PORTFOLIO / DOCUMENTS CARDS
+           ============================================ */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+        }
+
+        .portfolio-card {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .portfolio-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-xl); }
+
+        .portfolio-image {
+            height: 220px;
+            background: linear-gradient(135deg, var(--primary), var(--energy));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portfolio-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 50%, rgba(0, 0, 0, 0.3) 100%);
+        }
+
+        .portfolio-image .project-tag {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--primary);
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 2;
+        }
+
+        .portfolio-body { padding: 1.5rem; }
+
+        .portfolio-body h3 {
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .portfolio-body h3 .arrow {
+            color: var(--primary);
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .portfolio-card:hover .arrow { transform: translateX(5px); }
+
+        .portfolio-body p { color: var(--text-medium); font-size: 0.9rem; margin-bottom: 1rem; }
+        .portfolio-tech { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+        .tech-tag {
+            padding: 0.25rem 0.75rem;
+            background: var(--bg-light);
+            color: var(--text-medium);
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        /* ============================================
+           CONTACT SECTION
+           ============================================ */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .contact-info-card {
+            background: linear-gradient(135deg, var(--primary), var(--energy-dark));
+            color: white;
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-info-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .contact-info-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .contact-info-card > p {
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: flex-start;
+            position: relative;
+        }
+
+        .contact-item .icon-box {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .contact-item .info h4 {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-item .info a,
+        .contact-item .info p {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+
+        .contact-item .info a:hover { text-decoration: underline; }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            position: relative;
+        }
+
+        .social-links a {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .contact-form-card {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .contact-form-card h3 { font-size: 1.4rem; margin-bottom: 1.5rem; }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: var(--transition);
+            background: var(--bg-light);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: var(--bg-white);
+            box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.1);
+        }
+
+        .form-group textarea { min-height: 120px; resize: vertical; }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer h4 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer a {
+            color: #94a3b8;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .footer a:hover { color: white; transform: translateX(5px); }
+
+        .footer-bottom {
+            border-top: 1px solid #334155;
+            padding-top: 1.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        /* ============================================
+           TOAST NOTIFICATION
+           ============================================ */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--text-dark);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-xl);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500;
+            max-width: 320px;
+        }
+
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success { background: #16a34a; }
+        .toast.error { background: #dc2626; }
+        .toast.info { background: var(--primary); }
+
+        /* ============================================
+           SCROLL TO TOP
+           ============================================ */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 999;
+        }
+
+        .scroll-top.visible { opacity: 1; visibility: visible; }
+        .scroll-top:hover { background: var(--primary-dark); transform: translateY(-3px); }
+
+        /* ============================================
+           ANIMATIONS
+           ============================================ */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 1024px) {
+            .hero-content { grid-template-columns: 1fr; text-align: center; }
+            .hero-text .bio { margin-left: auto; margin-right: auto; }
+            .hero-actions, .hero-stats { justify-content: center; }
+            .hero-visual { order: -1; }
+            .profile-frame { width: 280px; height: 280px; }
+            .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .contact-grid { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: 1fr 1fr; }
+            .nav a { padding: 0.5rem 0.7rem; font-size: 0.85rem; }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle { display: flex; }
+            .nav {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                padding: 1rem;
+                box-shadow: var(--shadow-md);
+                gap: 0.25rem;
+            }
+            .nav.open { display: flex; }
+            .nav a { padding: 0.75rem 1rem; width: 100%; text-align: center; font-size: 0.9rem; }
+            .section { padding: 4rem 0; }
+            .section-title { font-size: 2rem; }
+            .hero-text h1 { font-size: 2.25rem; }
+            .hero-stats { gap: 1.5rem; }
+            .floating-badge { display: none; }
+            .footer-content { grid-template-columns: 1fr; }
+            .contact-info-card, .contact-form-card { padding: 1.75rem; }
+        }
+
+        @media (max-width: 480px) {
+            .hero-text h1 { font-size: 1.85rem; }
+            .hero-actions { flex-direction: column; }
+            .hero-actions .btn { width: 100%; justify-content: center; }
+            .profile-frame { width: 220px; height: 220px; }
+            .toast { left: 1rem; right: 1rem; bottom: 1rem; max-width: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================
+    HEADER
+    ============================================ -->
+    <header class="header" id="header">
+        <div class="container">
+            <a href="#home" class="logo">
+                <span class="logo-mark">MT</span>
+                <span>Mohamed Tawhid</span>
+            </a>
+
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+
+            <nav class="nav" id="mainNav">
+                <a href="#home" class="active">Home</a>
+                <a href="#about">About</a>
+                <a href="#skills">Skills</a>
+                <a href="#software">Tools</a>
+                <a href="#languages">Languages</a>
+                <a href="#portfolio">Projects</a>
+                <a href="#documents">Documents</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ============================================
+    HERO SECTION
+    ============================================ -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="greeting">
+                        <span>⚡</span> Welcome to my engineering portfolio
+                    </div>
+
+                    <h1>
+                        Hi, I'm <span class="highlight">Mohamed Tawhid</span>
+                    </h1>
+                    <p class="role">
+                        Electrical Power & Renewable Energy Engineer<br>
+                        <span style="font-size: 1rem; color: var(--text-medium);">
+                            Aspiring Energy Analyst · Electricity Grid Modeller · Renewable Energy Engineer
+                        </span>
+                    </p>
+
+                    <p class="bio">
+                        Results-driven engineer specializing in design, operation, and optimization of renewable energy systems (up to 1000 kW). Proven expertise managing 10+ international deployments for UNDP, Siemens, and Schneider Electric, with a passion for leveraging Python, R, Power BI, and Machine Learning to drive the zero-carbon energy transition.
+                    </p>
+
+                    <div class="hero-actions">
+                        <a href="#portfolio" class="btn btn-primary">🚀 View My Projects</a>
+                        <a href="CV_Mohamed_Tawhid.pdf" download class="btn btn-outline">📄 Download CV</a>
+                    </div>
+
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <span class="number" data-count="10">0</span>
+                            <span class="label">International Deployments</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="number" data-count="8">0</span>
+                            <span class="label">Projects Funded</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="number" data-count="4">0</span>
+                            <span class="label">European Universities</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-visual">
+                    <div class="floating-badge badge-1">
+                        <span>⚡</span> Power Systems
+                    </div>
+                    <div class="floating-badge badge-2">
+                        <span>🌱</span> Renewables
+                    </div>
+                    <div class="floating-badge badge-3">
+                        <span>📊</span> Energy Analytics
+                    </div>
+
+                    <div class="profile-frame">
+                        <div class="profile-inner">
+                            <img src="CV_Photo.png" alt="Mohamed Tawhid" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+    ABOUT SECTION
+    ============================================ -->
+    <section class="section" id="about">
+        <div class="container">
+            <h2 class="section-title fade-in">About <span class="highlight">Me</span></h2>
+            <p class="section-subtitle fade-in">
+                An engineer combining technical depth in power systems with data-driven analytics
+            </p>
+
+            <div class="about-grid">
+                <div class="about-text fade-in">
+                    <h3>My Story</h3>
+                    <p>
+                        I'm an <strong>Electrical Power & Renewable Energy Engineer</strong> with an Erasmus Mundus Joint Master's in Energy Systems Optimization. My journey has taken me across four European universities — L'Aquila, Vienna, Barcelona, and Brussels — building a strong technical foundation in power systems modelling, renewable integration, and energy data science.
+                    </p>
+                    <p>
+                        During my internship at <strong>ENTSO-E</strong>, I applied machine learning to time-series forecasting on Germany's 2024 hourly load data and transformed raw data from 172 energy meters into strategic business intelligence. My work at <strong>UNDP</strong> involved managing 10 international solar PV installations, where I used HOMER Pro and PV*SOL to reduce LCOE by 15% and increase renewable fraction by 40%.
+                    </p>
+                    <p>
+                        I'm now focused on becoming an <strong>Energy Analyst</strong> and <strong>Electricity Grid Modeller</strong>, applying my engineering expertise and data analytics skills to accelerate Europe's zero-carbon energy transition.
+                    </p>
+
+                    <div class="info-list">
+                        <div class="info-item">
+                            <span class="icon">📍</span>
+                            <div>
+                                <h4>Location</h4>
+                                <p>Brussels, Belgium · L'Aquila, Italy</p>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <span class="icon">🎓</span>
+                            <div>
+                                <h4>Education</h4>
+                                <p>MSc Energy Systems Optimization (Erasmus Mundus)<br>BSc Electrical Power & Renewable Energy Engineering</p>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <span class="icon">💼</span>
+                            <div>
+                                <h4>Career Focus</h4>
+                                <p>Energy Analytics · Grid Modelling · Renewable Energy Systems</p>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <span class="icon">✨</span>
+                            <div>
+                                <h4>Interests</h4>
+                                <p>Machine Learning for Energy · Microgrids · Energy Policy</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fade-in">
+                    <h3 style="margin-bottom: 1.5rem;">Experience & Education</h3>
+                    <div class="timeline">
+
+                        <div class="timeline-item">
+                            <span class="date">Feb 2026 – Aug 2026</span>
+                            <h4>Energy Data Space Engineer</h4>
+                            <p class="company">ENTSO-E | Brussels, Belgium</p>
+                            <p>Applied machine learning for time-series forecasting on Germany's 2024 hourly load data to generate actionable insights for grid stability and capacity planning. Transformed raw data from 172 energy meters into strategic business intelligence. Identified technical gaps and opportunities for TSOs in the Common European Energy Data Space.</p>
+                        </div>
+
+                        <div class="timeline-item">
+                            <span class="date">Jun 2026 – Jul 2026</span>
+                            <h4>UN Graduate Study Programme — Egypt Representative</h4>
+                            <p class="company">United Nations Office at Geneva | Geneva, Switzerland</p>
+                            <p>Drafted policy recommendations on AI governance and emerging technologies through interdisciplinary research with UN agencies (ILO, OHCHR, ITU, WHO, UNHCR). Collaborated with 56 graduate students from 42 countries on digital cooperation and international security.</p>
+                        </div>
+
+                        <div class="timeline-item">
+                            <span class="date">Jul 2025</span>
+                            <h4>EULiST Student Conference Representative</h4>
+                            <p class="company">IMT Nord Europe | Douai, France</p>
+                            <p>Led my team to 1st Place in the EULiST Green Hackathon with a low-cost recycling system proposal. Delivered a keynote presentation on global solar energy deployment, translating UNDP project experience into strategic insights on energy transition.</p>
+                        </div>
+
+                        <div class="timeline-item">
+                            <span class="date">Feb 2024 – Jul 2024</span>
+                            <h4>Green Energy Engineer</h4>
+                            <p class="company">United Nations Development Programme | Copenhagen, Denmark</p>
+                            <p>Managed technical operations for 10 international solar PV installations (20–1000 kW), ensuring 98% system availability. Modeled and optimized hybrid energy systems using HOMER Pro and PVSol — reduced LCOE by 15% and increased Renewable Fraction by 40%. Authored 8 business cases securing $200,000+ in funding.</p>
+                        </div>
+
+                        <div class="timeline-item">
+                            <span class="date">Sep 2023 – Dec 2023</span>
+                            <h4>Electrical Design Engineering Program</h4>
+                            <p class="company">Shaker Consultancy Group | Cairo, Egypt</p>
+                            <p>Designed 15 MW of electrical distribution infrastructure including three 11kV/0.4kV transformer substations. Modeled energy distribution networks and conducted protection coordination studies using ETAP, ensuring 100% compliance with IEC 61439 standards.</p>
+                        </div>
+
+                        <div class="timeline-item">
+                            <span class="date">Jan 2022 – Jun 2022</span>
+                            <h4>Energy Management Engineer (Intern)</h4>
+                            <p class="company">Schneider Electric | Cairo, Egypt</p>
+                            <p>Led design and deployment of an Intelligent Motor Control Center educational kit for 500 students. Simulated a 4000 A LV Switchboard, ensuring 100% compliance with IEC 61439 standards.</p>
+                        </div>
+
+                        <div class="timeline-item">
+                            <span class="date">Sep 2024 – Aug 2026</span>
+                            <h4>Erasmus Mundus Joint Master's — Energy Systems Optimization</h4>
+                            <p class="company">Full Scholarship | L'Aquila · Vienna · Barcelona · Brussels</p>
+                            <p>Semester 1: Università degli Studi dell'Aquila (GPA 3.0/4.0). Semester 2: Vienna University of Technology (GPA 4.0/4.0). Semester 3: Universitat Autònoma de Barcelona (GPA 4.0/4.0). Semester 4: Energy Data Space Internship at ENTSO-E.</p>
+                        </div>
+
+                        <div class="timeline-item">
+                            <span class="date">Aug 2022 – Dec 2022</span>
+                            <h4>Semester Abroad — Energy Engineering</h4>
+                            <p class="company">University of Nebraska-Lincoln | Nebraska, USA</p>
+                            <p>GPA 3.75/4.0 (Dean's List). Capstone: Engineered 6 MW wind farm producing 32.8 GWh annually with LCOE 9% below national average ($0.1026/kWh).</p>
+                        </div>
+
+                        <div class="timeline-item">
+                            <span class="date">Aug 2019 – Jul 2023</span>
+                            <h4>BSc Electrical Power & Renewable Energy Engineering</h4>
+                            <p class="company">Ain Shams University | Cairo, Egypt</p>
+                            <p>GPA 3.42/4.0 · Top 5% · Dean's List. Thesis: Designed 2 MW PV systems reducing campus CO₂ by 750 tons/year, increased renewable penetration by 15% across 11 buildings generating 3.1 GWh annually.</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+    SKILLS SECTION
+    ============================================ -->
+    <section class="section" id="skills" style="background: var(--bg-white);">
+        <div class="container">
+            <h2 class="section-title fade-in">Technical <span class="highlight">Skills</span></h2>
+            <p class="section-subtitle fade-in">
+                Engineering, analytics, and simulation expertise across the energy value chain
+            </p>
+
+            <div class="skills-grid">
+                <div class="skill-category fade-in">
+                    <div class="category-icon">⚡</div>
+                    <h3>Power Systems & Grid</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">Power Systems Analysis</span>
+                        <span class="skill-tag">Optimal Power Flow</span>
+                        <span class="skill-tag">Short-Circuit Analysis</span>
+                        <span class="skill-tag">Protection Coordination</span>
+                        <span class="skill-tag">Grid Integration</span>
+                        <span class="skill-tag">Microgrid Design</span>
+                    </div>
+                </div>
+
+                <div class="skill-category fade-in">
+                    <div class="category-icon">🌱</div>
+                    <h3>Renewable Energy</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">Solar PV Design</span>
+                        <span class="skill-tag">Wind Farm Engineering</span>
+                        <span class="skill-tag">Hybrid Systems</span>
+                        <span class="skill-tag">Techno-Economic Analysis</span>
+                        <span class="skill-tag">LCOE Modeling</span>
+                        <span class="skill-tag">Feasibility Studies</span>
+                    </div>
+                </div>
+
+                <div class="skill-category fade-in">
+                    <div class="category-icon">📊</div>
+                    <h3>Data Science & Analytics</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">Machine Learning</span>
+                        <span class="skill-tag">Time-Series Forecasting</span>
+                        <span class="skill-tag">Pandas · NumPy</span>
+                        <span class="skill-tag">R</span>
+                        <span class="skill-tag">Power BI</span>
+                        <span class="skill-tag">MATLAB</span>
+                    </div>
+                </div>
+
+                <div class="skill-category fade-in">
+                    <div class="category-icon">⚙️</div>
+                    <h3>Electrical Design</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">IEC Standards</span>
+                        <span class="skill-tag">LV/MV Systems</span>
+                        <span class="skill-tag">Transformer Substations</span>
+                        <span class="skill-tag">Motor Control Centers</span>
+                        <span class="skill-tag">Electrical Distribution</span>
+                    </div>
+                </div>
+
+                <div class="skill-category fade-in">
+                    <div class="category-icon">💼</div>
+                    <h3>Project & Business</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">Business Case Development</span>
+                        <span class="skill-tag">Project Management</span>
+                        <span class="skill-tag">Stakeholder Engagement</span>
+                        <span class="skill-tag">Financial Modeling</span>
+                        <span class="skill-tag">Technical Writing</span>
+                    </div>
+                </div>
+
+                <div class="skill-category fade-in">
+                    <div class="category-icon">🌍</div>
+                    <h3>Energy Policy & Domain</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">EU Energy Policy</span>
+                        <span class="skill-tag">TSO Operations</span>
+                        <span class="skill-tag">Common European Energy Data Space</span>
+                        <span class="skill-tag">Zero-Carbon Transition</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+    SOFTWARE / TOOLS SECTION
+    ============================================ -->
+    <section class="section" id="software">
+        <div class="container">
+            <h2 class="section-title fade-in">Engineering <span class="highlight">Tools</span></h2>
+            <p class="section-subtitle fade-in">
+                Software and platforms I use for simulation, modelling, and analysis
+            </p>
+
+            <div class="software-grid">
+                <div class="software-card fade-in" onclick="trackSoftwareClick('ETAP')">
+                    <div class="software-icon">⚡</div>
+                    <h4>ETAP</h4>
+                    <div class="proficiency">
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                    </div>
+                </div>
+
+                <div class="software-card fade-in" onclick="trackSoftwareClick('PSS/E')">
+                    <div class="software-icon">🔌</div>
+                    <h4>PSS®E</h4>
+                    <div class="proficiency">
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot"></span>
+                    </div>
+                </div>
+
+                <div class="software-card fade-in" onclick="trackSoftwareClick('PVsyst')">
+                    <div class="software-icon">☀️</div>
+                    <h4>PVsyst</h4>
+                    <div class="proficiency">
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                    </div>
+                </div>
+
+                <div class="software-card fade-in" onclick="trackSoftwareClick('PV*SOL')">
+                    <div class="software-icon">🔆</div>
+                    <h4>PV*SOL</h4>
+                    <div class="proficiency">
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot"></span>
+                    </div>
+                </div>
+
+                <div class="software-card fade-in" onclick="trackSoftwareClick('HOMER Pro')">
+                    <div class="software-icon">🔋</div>
+                    <h4>HOMER Pro</h4>
+                    <div class="proficiency">
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot"></span>
+                    </div>
+                </div>
+
+                <div class="software-card fade-in" onclick="trackSoftwareClick('RETScreen')">
+                    <div class="software-icon">📈</div>
+                    <h4>RETScreen</h4>
+                    <div class="proficiency">
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot"></span>
+                    </div>
+                </div>
+
+                <div class="software-card fade-in" onclick="trackSoftwareClick('AutoCAD')">
+                    <div class="software-icon">📐</div>
+                    <h4>AutoCAD</h4>
+                    <div class="proficiency">
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot"></span>
+                    </div>
+                </div>
+
+                <div class="software-card fade-in" onclick="trackSoftwareClick('Python')">
+                    <div class="software-icon">🐍</div>
+                    <h4>Python</h4>
+                    <div class="proficiency">
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                    </div>
+                </div>
+
+                <div class="software-card fade-in" onclick="trackSoftwareClick('MATLAB')">
+                    <div class="software-icon">🧮</div>
+                    <h4>MATLAB</h4>
+                    <div class="proficiency">
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot"></span>
+                    </div>
+                </div>
+
+                <div class="software-card fade-in" onclick="trackSoftwareClick('R')">
+                    <div class="software-icon">📉</div>
+                    <h4>R</h4>
+                    <div class="proficiency">
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot"></span>
+                        <span class="proficiency-dot"></span>
+                    </div>
+                </div>
+
+                <div class="software-card fade-in" onclick="trackSoftwareClick('Power BI')">
+                    <div class="software-icon">📊</div>
+                    <h4>Power BI</h4>
+                    <div class="proficiency">
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot"></span>
+                    </div>
+                </div>
+
+                <div class="software-card fade-in" onclick="trackSoftwareClick('Microsoft 365')">
+                    <div class="software-icon">📄</div>
+                    <h4>Microsoft 365</h4>
+                    <div class="proficiency">
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                        <span class="proficiency-dot filled"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+    LANGUAGES SECTION
+    ============================================ -->
+    <section class="section" id="languages" style="background: var(--bg-white);">
+        <div class="container">
+            <h2 class="section-title fade-in">Languages <span class="highlight">I Speak</span></h2>
+            <p class="section-subtitle fade-in">
+                Communicating across cultures and international teams
+            </p>
+
+            <div class="languages-grid">
+                <div class="language-card fade-in">
+                    <div class="language-flag">AR</div>
+                    <h3>Arabic</h3>
+                    <span class="level">Native</span>
+                    <p class="level-desc">Full native proficiency in written and spoken Arabic.</p>
+                </div>
+
+                <div class="language-card fade-in">
+                    <div class="language-flag">EN</div>
+                    <h3>English</h3>
+                    <span class="level">Advanced — C1</span>
+                    <p class="level-desc">Full professional proficiency in technical and business communication.</p>
+                </div>
+
+                <div class="language-card fade-in">
+                    <div class="language-flag">DE</div>
+                    <h3>German</h3>
+                    <span class="level">Pre-Intermediate — A2</span>
+                    <p class="level-desc">Basic conversational skills. Currently improving through regular study.</p>
+                </div>
+
+                <div class="language-card fade-in">
+                    <div class="language-flag">FR</div>
+                    <h3>French</h3>
+                    <span class="level">Beginner — A1</span>
+                    <p class="level-desc">Foundational French. Actively studying to reach professional level.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+    PORTFOLIO SECTION
+    ============================================ -->
+    <section class="section" id="portfolio">
+        <div class="container">
+            <h2 class="section-title fade-in">Featured <span class="highlight">Projects</span></h2>
+            <p class="section-subtitle fade-in">
+                Interactive tools and web applications built during my energy engineering work
+            </p>
+
+            <div class="portfolio-grid">
+
+                <a href="https://motawhid.github.io/Interactive-Dashboard-for-ERAA-Data/" target="_blank" rel="noopener"
+                   class="portfolio-card fade-in" onclick="trackPortfolioClick('Interactive Dashboard for ERAA Data')">
+                    <div class="portfolio-image" style="background: linear-gradient(135deg, #0f4c81, #06b6d4);">
+                        <span class="project-tag">Data Dashboard</span>
+                        📊
+                    </div>
+                    <div class="portfolio-body">
+                        <h3>
+                            Interactive Dashboard for ERAA Data
+                            <span class="arrow">→</span>
+                        </h3>
+                        <p>An interactive dashboard for exploring the European Resource Adequacy Assessment (ERAA). Enables stakeholders to analyse adequacy metrics, generation margins, and regional risk across the European power system.</p>
+                        <div class="portfolio-tech">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Data Viz</span>
+                            <span class="tech-tag">ERAA</span>
+                            <span class="tech-tag">Power Systems</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://motawhid.github.io/ENTSO-E-Energy-News-Hub-Advanced/" target="_blank" rel="noopener"
+                   class="portfolio-card fade-in" onclick="trackPortfolioClick('ENTSO-E Energy News Hub - Advanced')">
+                    <div class="portfolio-image" style="background: linear-gradient(135deg, #082f4f, #0f4c81);">
+                        <span class="project-tag">Energy Platform</span>
+                        ⚡
+                    </div>
+                    <div class="portfolio-body">
+                        <h3>
+                            ENTSO-E Energy News Hub — Advanced
+                            <span class="arrow">→</span>
+                        </h3>
+                        <p>Multi-page platform featuring dynamic news filtering, event timelines, live market dashboards, and a newsletter subscription system — built to showcase European energy market knowledge.</p>
+                        <div class="portfolio-tech">
+                            <span class="tech-tag">HTML5</span>
+                            <span class="tech-tag">JavaScript</span>
+                            <span class="tech-tag">GA4</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://motawhid.github.io/ENTSO-E-Energy-News-Hub-Basic/" target="_blank" rel="noopener"
+                   class="portfolio-card fade-in" onclick="trackPortfolioClick('ENTSO-E Energy News Hub - Basic')">
+                    <div class="portfolio-image" style="background: linear-gradient(135deg, #0891b2, #06b6d4);">
+                        <span class="project-tag">Web Project</span>
+                        🔌
+                    </div>
+                    <div class="portfolio-body">
+                        <h3>
+                            ENTSO-E Energy News Hub — Basic
+                            <span class="arrow">→</span>
+                        </h3>
+                        <p>A clean single-page energy news portal introducing ENTSO-E's mission, latest updates, and market highlights — the foundation for a scalable content publishing platform.</p>
+                        <div class="portfolio-tech">
+                            <span class="tech-tag">HTML5</span>
+                            <span class="tech-tag">CSS3</span>
+                            <span class="tech-tag">Responsive</span>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+    DOCUMENTS SECTION
+    ============================================ -->
+    <section class="section" id="documents" style="background: var(--bg-white);">
+        <div class="container">
+            <h2 class="section-title fade-in">Professional <span class="highlight">Documents</span></h2>
+            <p class="section-subtitle fade-in">
+                View or download my CV, recommendation letters, transcripts, certificates, and presentations.
+            </p>
+
+            <!-- CV & Recommendation Letters -->
+            <h3 class="fade-in" style="margin: 2rem 0 1rem; color: var(--primary); font-size: 1.2rem;">📄 CV & Recommendation Letters</h3>
+            <div class="portfolio-grid" style="margin-bottom: 3rem;">
+
+                <a href="CV_Mohamed_Tawhid.pdf" target="_blank" rel="noopener"
+                   class="portfolio-card fade-in" onclick="trackDocumentClick('CV')">
+                    <div class="portfolio-image" style="background: linear-gradient(135deg, #0f4c81, #06b6d4);">
+                        <span class="project-tag">CV</span>
+                        📄
+                    </div>
+                    <div class="portfolio-body">
+                        <h3>Curriculum Vitae <span class="arrow">→</span></h3>
+                        <p>Full professional CV — experience, education, technical skills, and languages.</p>
+                        <div class="portfolio-tech">
+                            <span class="tech-tag">PDF</span>
+                            <span class="tech-tag">Updated 2026</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="Recommendation_Letter_ENTSOE_Manager.pdf" target="_blank" rel="noopener"
+                   class="portfolio-card fade-in" onclick="trackDocumentClick('Recommendation - ENTSO-E Manager')">
+                    <div class="portfolio-image" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
+                        <span class="project-tag">Letter</span>
+                        📝
+                    </div>
+                    <div class="portfolio-body">
+                        <h3>Recommendation — ENTSO-E Manager <span class="arrow">→</span></h3>
+                        <p>Recommendation from my direct manager at ENTSO-E during the Energy Data Space internship.</p>
+                        <div class="portfolio-tech">
+                            <span class="tech-tag">PDF</span>
+                            <span class="tech-tag">ENTSO-E</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="Recommendation_Letter_ENTSOE_Supervisor.pdf" target="_blank" rel="noopener"
+                   class="portfolio-card fade-in" onclick="trackDocumentClick('Recommendation - ENTSO-E Supervisor')">
+                    <div class="portfolio-image" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">
+                        <span class="project-tag">Letter</span>
+                        📝
+                    </div>
+                    <div class="portfolio-body">
+                        <h3>Recommendation — ENTSO-E Supervisor <span class="arrow">→</span></h3>
+                        <p>Recommendation from my academic supervisor for the ENTSO-E internship placement.</p>
+                        <div class="portfolio-tech">
+                            <span class="tech-tag">PDF</span>
+                            <span class="tech-tag">ENTSO-E</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Transcripts, Certificates & Presentations -->
+            <h3 class="fade-in" style="margin: 2rem 0 1rem; color: var(--primary); font-size: 1.2rem;">🎓 Transcripts, Certificates & Presentations</h3>
+            <div class="portfolio-grid">
+
+                <a href="Transcripts.pdf" target="_blank" rel="noopener"
+                   class="portfolio-card fade-in" onclick="trackDocumentClick('Academic Transcripts')">
+                    <div class="portfolio-image" style="background: linear-gradient(135deg, #10b981, #059669);">
+                        <span class="project-tag">Transcripts</span>
+                        🎓
+                    </div>
+                    <div class="portfolio-body">
+                        <h3>Academic Transcripts <span class="arrow">→</span></h3>
+                        <p>Official transcripts from the Erasmus Mundus Master's, Ain Shams University BSc, and University of Nebraska-Lincoln.</p>
+                        <div class="portfolio-tech">
+                            <span class="tech-tag">PDF</span>
+                            <span class="tech-tag">GPA 4.0/4.0</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="Internship_Certificates.pdf" target="_blank" rel="noopener"
+                   class="portfolio-card fade-in" onclick="trackDocumentClick('Internship Certificates')">
+                    <div class="portfolio-image" style="background: linear-gradient(135deg, #ec4899, #be185d);">
+                        <span class="project-tag">Certificates</span>
+                        🏅
+                    </div>
+                    <div class="portfolio-body">
+                        <h3>Internship Certificates <span class="arrow">→</span></h3>
+                        <p>Official certificates of completion from ENTSO-E and other professional engineering engagements.</p>
+                        <div class="portfolio-tech">
+                            <span class="tech-tag">PDF</span>
+                            <span class="tech-tag">ENTSO-E</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="CEEDS_DIA_WG_Presentation.pdf" target="_blank" rel="noopener"
+                   class="portfolio-card fade-in" onclick="trackDocumentClick('CEEDS DIA WG Presentation')">
+                    <div class="portfolio-image" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">
+                        <span class="project-tag">Presentation</span>
+                        🎤
+                    </div>
+                    <div class="portfolio-body">
+                        <h3>CEEDS DIA WG Presentation <span class="arrow">→</span></h3>
+                        <p>Presentation delivered at the CEEDS Data Interoperability Alliance Working Group, covering energy data space concepts and stakeholder engagement.</p>
+                        <div class="portfolio-tech">
+                            <span class="tech-tag">PDF</span>
+                            <span class="tech-tag">ENTSO-E</span>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+    CONTACT SECTION
+    ============================================ -->
+    <section class="section" id="contact">
+        <div class="container">
+            <h2 class="section-title fade-in">Get in <span class="highlight">Touch</span></h2>
+            <p class="section-subtitle fade-in">
+                Open to opportunities in energy analytics, grid modelling, and renewable energy engineering
+            </p>
+
+            <div class="contact-grid">
+                <div class="contact-info-card fade-in">
+                    <h3>Let's Connect</h3>
+                    <p>Feel free to reach out for opportunities, collaborations, or technical discussions. I typically respond within 24 hours.</p>
+
+                    <div class="contact-item">
+                        <div class="icon-box">📧</div>
+                        <div class="info">
+                            <h4>Email</h4>
+                            <a href="mailto:mohamedsaeedtawheed@gmail.com">mohamedsaeedtawheed@gmail.com</a>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="icon-box">📱</div>
+                        <div class="info">
+                            <h4>Phone</h4>
+                            <a href="tel:+393445576564">+39 344 557 6564</a>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="icon-box">📍</div>
+                        <div class="info">
+                            <h4>Location</h4>
+                            <p>Brussels, Belgium · L'Aquila, Italy</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="icon-box">💼</div>
+                        <div class="info">
+                            <h4>LinkedIn</h4>
+                            <a href="https://www.linkedin.com/in/mohamedtawheed/" target="_blank" rel="noopener">
+                                linkedin.com/in/mohamedtawheed
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/in/mohamedtawheed/" target="_blank" rel="noopener" title="LinkedIn">💼</a>
+                        <a href="https://github.com/MoTawhid" target="_blank" rel="noopener" title="GitHub">💻</a>
+                        <a href="mailto:mohamedsaeedtawheed@gmail.com" title="Email">📧</a>
+                    </div>
+                </div>
+
+                <div class="contact-form-card fade-in">
+                    <h3>Send Me a Message</h3>
+                    <form id="contactForm" onsubmit="handleFormSubmit(event)">
+                        <div class="form-group">
+                            <label for="name">Your Name *</label>
+                            <input type="text" id="name" placeholder="John Doe" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Your Email *</label>
+                            <input type="email" id="email" placeholder="john@example.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <select id="subject">
+                                <option value="">Select a subject...</option>
+                                <option value="job">Job Opportunity</option>
+                                <option value="collaboration">Technical Collaboration</option>
+                                <option value="research">Research / Project</option>
+                                <option value="feedback">Feedback</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Message *</label>
+                            <textarea id="message" placeholder="Write your message here..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                            📩 Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+    FOOTER
+    ============================================ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <h4>Mohamed Tawhid</h4>
+                    <p>Electrical Power & Renewable Energy Engineer passionate about the zero-carbon energy transition, grid modelling, and data-driven energy analytics.</p>
+                    <p style="margin-top: 1rem; font-size: 0.85rem;">📍 Brussels, Belgium · L'Aquila, Italy</p>
+                </div>
+
+                <div>
+                    <h4>Navigate</h4>
+                    <a href="#home">Home</a>
+                    <a href="#about">About</a>
+                    <a href="#skills">Skills</a>
+                    <a href="#portfolio">Projects</a>
+                    <a href="#documents">Documents</a>
+                </div>
+
+                <div>
+                    <h4>Explore</h4>
+                    <a href="#software">Tools</a>
+                    <a href="#languages">Languages</a>
+                    <a href="#contact">Contact</a>
+                    <a href="CV_Mohamed_Tawhid.pdf" download onclick="trackDocumentClick('CV - Footer Download')">
+                        Download CV
+                    </a>
+                </div>
+
+                <div>
+                    <h4>Connect</h4>
+                    <a href="https://www.linkedin.com/in/mohamedtawheed/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://github.com/MoTawhid" target="_blank" rel="noopener">GitHub</a>
+                    <a href="mailto:mohamedsaeedtawheed@gmail.com">Email</a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; <span id="year"></span> Mohamed Tawhid. All rights reserved. | Built with ⚡ and precision</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================
+    TOAST NOTIFICATION
+    ============================================ -->
+    <div class="toast" id="toast"></div>
+
+    <!-- ============================================
+    SCROLL TO TOP
+    ============================================ -->
+    <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Scroll to top">
+        ↑
+    </button>
+
+    <!-- ============================================
+    JAVASCRIPT
+    ============================================ -->
+    <script>
+        // ============================================
+        // HEADER SCROLL EFFECT
+        // ============================================
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('scrolled', window.scrollY > 50);
+            document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 400);
+        });
+
+        // ============================================
+        // MOBILE MENU
+        // ============================================
+        document.getElementById('menuToggle').addEventListener('click', function () {
+            this.classList.toggle('active');
+            document.getElementById('mainNav').classList.toggle('open');
+        });
+
+        document.querySelectorAll('.nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mainNav').classList.remove('open');
+                document.getElementById('menuToggle').classList.remove('active');
+            });
+        });
+
+        // ============================================
+        // SCROLL SPY
+        // ============================================
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 120;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // ============================================
+        // FADE-IN ON SCROLL
+        // ============================================
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    if (entry.target.classList.contains('fade-in')) {
+                        trackSectionView(entry.target);
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // ============================================
+        // COUNTER ANIMATION
+        // ============================================
+        function animateCounters() {
+            document.querySelectorAll('[data-count]').forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-count'));
+                const duration = 2000;
+                const step = target / (duration / 16);
+                let current = 0;
+
+                const updateCounter = () => {
+                    current += step;
+                    if (current < target) {
+                        counter.textContent = Math.floor(current) + '+';
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target + '+';
+                    }
+                };
+                updateCounter();
+            });
+        }
+
+        const heroObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    heroObserver.disconnect();
+                }
+            });
+        }, { threshold: 0.5 });
+
+        heroObserver.observe(document.querySelector('.hero-stats'));
+
+        // ============================================
+        // TOAST NOTIFICATION
+        // ============================================
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+            toast.innerHTML = `${icons[type] || ''} ${message}`;
+            toast.className = 'toast ' + type;
+            toast.classList.add('show');
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+        }
+
+        // ============================================
+        // FORM SUBMISSION
+        // ============================================
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+
+            if (typeof gtag === 'function') {
+                gtag('event', 'generate_lead', {
+                    'method': 'contact_form',
+                    'subject': subject || 'not_specified'
+                });
+            }
+
+            console.log('📩 Contact form submitted:', { name, email, subject });
+            showToast(`Thank you, ${name}! Your message has been sent.`, 'success');
+            document.getElementById('contactForm').reset();
+        }
+
+        // ============================================
+        // ANALYTICS TRACKING FUNCTIONS
+        // ============================================
+        function trackSectionView(el) {
+            const section = el.closest('section');
+            if (section && !section.dataset.tracked) {
+                section.dataset.tracked = 'true';
+                const sectionId = section.getAttribute('id') || 'unknown';
+                console.log(`📊 Section viewed: ${sectionId}`);
+                if (typeof gtag === 'function') {
+                    gtag('event', 'section_view', { 'section_id': sectionId });
+                }
+            }
+        }
+
+        function trackSoftwareClick(name) {
+            console.log(`📊 Software clicked: ${name}`);
+            showToast(`Viewing: ${name}`, 'info');
+            if (typeof gtag === 'function') {
+                gtag('event', 'select_content', {
+                    'content_type': 'software',
+                    'item_name': name
+                });
+            }
+        }
+
+        function trackPortfolioClick(name) {
+            console.log(`📊 Portfolio project clicked: ${name}`);
+            if (typeof gtag === 'function') {
+                gtag('event', 'select_content', {
+                    'content_type': 'portfolio_project',
+                    'item_name': name
+                });
+                gtag('event', 'click', {
+                    'link_url': name,
+                    'outbound': true
+                });
+            }
+        }
+
+        function trackDocumentClick(name) {
+            console.log(`📊 Document viewed: ${name}`);
+            showToast(`Opening: ${name}`, 'info');
+            if (typeof gtag === 'function') {
+                gtag('event', 'file_download', {
+                    'file_name': name,
+                    'file_type': 'pdf'
+                });
+                gtag('event', 'select_content', {
+                    'content_type': 'document',
+                    'item_name': name
+                });
+            }
+        }
+
+        // Track social link clicks
+        document.querySelectorAll('.social-links a').forEach(link => {
+            link.addEventListener('click', function () {
+                const platform = this.getAttribute('title') || 'social';
+                console.log(`📊 Social link clicked: ${platform}`);
+                if (typeof gtag === 'function') {
+                    gtag('event', 'social_click', { 'platform': platform });
+                }
+            });
+        });
+
+        // ============================================
+        // INITIALIZE
+        // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('year').textContent = new Date().getFullYear();
+            console.log('⚡ Portfolio loaded successfully!');
+            console.log('📊 Analytics tracking: Active');
+            console.log('💡 Tip: Ctrl+1-8 to navigate sections');
+        });
+
+        // ============================================
+        // SMOOTH SCROLL FOR ANCHOR LINKS
+        // ============================================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
